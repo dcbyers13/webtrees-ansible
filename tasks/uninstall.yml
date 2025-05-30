@@ -1,0 +1,25 @@
+---
+
+- name: Check existence of WebTrees systemd service
+  ansible.builtin.stat:
+    path: "{{ devture_systemd_docker_base_systemd_path }}/{{ webtrees_identifier }}.service"
+  register: webtrees_service_stat
+
+- when: webtrees_service_stat.stat.exists | bool
+  block:
+    - name: Ensure WebTrees systemd service is stopped
+      ansible.builtin.service:
+        name: "{{ webtrees_identifier }}"
+        state: stopped
+        enabled: false
+        daemon_reload: true
+
+    - name: Ensure WebTrees systemd service does not exist
+      ansible.builtin.file:
+        path: "{{ devture_systemd_docker_base_systemd_path }}/{{ webtrees_identifier }}.service"
+        state: absent
+
+    - name: Ensure WebTrees path doesn't exist
+      ansible.builtin.file:
+        path: "{{ webtrees_base_path }}"
+        state: absent

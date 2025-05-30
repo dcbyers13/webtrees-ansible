@@ -1,0 +1,52 @@
+{% if webtrees_container_labels_traefik_enabled %}
+traefik.enable=true
+
+{% if webtrees_container_labels_traefik_docker_network %}
+traefik.docker.network={{ webtrees_container_labels_traefik_docker_network }}
+{% endif %}
+
+{% set middlewares = [] %}
+
+{% if webtrees_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ webtrees_identifier }}-slashless-redirect.redirectregex.regex=^({{ webtrees_container_labels_traefik_path_prefix | quote }})$
+traefik.http.middlewares.{{ webtrees_identifier }}-slashless-redirect.redirectregex.replacement=${1}/
+{% set middlewares = middlewares + [webtrees_identifier + '-slashless-redirect'] %}
+{% endif %}
+
+{% if webtrees_container_labels_traefik_path_prefix != '/' %}
+traefik.http.middlewares.{{ webtrees_identifier }}-strip-prefix.stripprefix.prefixes={{ webtrees_container_labels_traefik_path_prefix }}
+{% set middlewares = middlewares + [webtrees_identifier + '-strip-prefix'] %}
+{% endif %}
+
+{% if webtrees_container_labels_traefik_additional_request_headers.keys() | length > 0 %}
+{% for name, value in webtrees_container_labels_traefik_additional_request_headers.items() %}
+traefik.http.middlewares.{{ webtrees_identifier }}-add-request-headers.headers.customrequestheaders.{{ name }}={{ value }}
+{% endfor %}
+{% set middlewares = middlewares + [webtrees_identifier + '-add-request-headers'] %}
+{% endif %}
+
+{% if webtrees_container_labels_traefik_additional_response_headers.keys() | length > 0 %}
+{% for name, value in webtrees_container_labels_traefik_additional_response_headers.items() %}
+traefik.http.middlewares.{{ webtrees_identifier }}-add-response-headers.headers.customresponseheaders.{{ name }}={{ value }}
+{% endfor %}
+{% set middlewares = middlewares + [webtrees_identifier + '-add-response-headers'] %}
+{% endif %}
+
+traefik.http.routers.{{ webtrees_identifier }}.rule={{ webtrees_container_labels_traefik_rule }}
+{% if webtrees_container_labels_traefik_priority | int > 0 %}
+traefik.http.routers.{{ webtrees_identifier }}.priority={{ webtrees_container_labels_traefik_priority }}
+{% endif %}
+traefik.http.routers.{{ webtrees_identifier }}.service={{ webtrees_identifier }}
+{% if middlewares | length > 0 %}
+traefik.http.routers.{{ webtrees_identifier }}.middlewares={{ middlewares | join(',') }}
+{% endif %}
+traefik.http.routers.{{ webtrees_identifier }}.entrypoints={{ webtrees_container_labels_traefik_entrypoints }}
+traefik.http.routers.{{ webtrees_identifier }}.tls={{ webtrees_container_labels_traefik_tls | to_json }}
+{% if webtrees_container_labels_traefik_tls %}
+traefik.http.routers.{{ webtrees_identifier }}.tls.certResolver={{ webtrees_container_labels_traefik_tls_certResolver }}
+{% endif %}
+
+traefik.http.services.{{ webtrees_identifier }}.loadbalancer.server.port=8079
+{% endif %}
+
+{{ webtrees_container_labels_additional_labels }}
