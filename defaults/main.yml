@@ -103,7 +103,23 @@ webtrees_container_hostname: ''
 webtrees_container_additional_volumes: []
 
 # A list of extra arguments to pass to the container
-webtrees_container_extra_arguments: []
+webtrees_container_extra_arguments: [ "--env BASE_URL=http://tree.americancallaghans.org, 
+--env DB_TYPE=pgsql, 
+--env DB_PORT=5432, 
+--env POSTGRES_USER=webtrees, 
+--env POSTGRES_PASSWORD='XtlHxe7B5nwxOFw1ET0VcQdBUsnYWbDyYI6cQMCI', 
+--env POSTGRES_DB=webtrees, 
+--env DB_PREFIX=wt_, 
+--env WT_USER=administrator, 
+--env WT_NAME=David Christopher Byers-Callahan, 
+--env WT_PASS='evArtzjqyTlPoRpru3qYW7EvOr2TgGlFQwxBaLXq', 
+--env WT_EMAIL='dcbyers13@gmail.com', 
+--env PHP_MEMORY_LIMIT=1024M, 
+--env PHP_MAX_EXECUTION_TIME=90, 
+--env PHP_POST_MAX_SIZE=50M, 
+--env PHP_UPLOAD_MAX_FILE_SIZE=50M, 
+--env PUID=33, 
+--env PGID=33"]
 
 # Additional environment variables.
 webtrees_environment_variables_additional_variables: ''
