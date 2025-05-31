@@ -28,8 +28,8 @@ ExecStartPre={{ devture_systemd_docker_base_host_command_docker }} create \
 			{% endif %}
 			--env-file={{ webtrees_base_path }}/env \
 			--label-file={{ webtrees_base_path }}/labels \
-			--mount type=bind,src={{ webtrees_data_path }},dst=/var/www/html/data \
-			--mount type=bind,src={{ webtrees_log_path }},dst=/var/log/apache2 \
+			--mount type=bind,src={{ webtrees_data_path }},dst=/var/www/webtrees/data \
+			--mount type=bind,src={{ webtrees_modules_path }},dst=/var/www/webtrees/modules_v4 \
 			{% for volume in webtrees_container_additional_volumes %}
 			--mount type={{ volume.type | default('bind' if '/' in volume.src else 'volume') }},src={{ volume.src }},dst={{ volume.dst }}{{ (',' + volume.options) if volume.options else '' }} \
 			{% endfor %}

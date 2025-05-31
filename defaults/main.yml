@@ -20,8 +20,7 @@ webtrees_path_prefix: /
 
 webtrees_base_path: "/{{ webtrees_identifier }}"
 webtrees_data_path: "{{ webtrees_base_path }}/data"
-webtrees_config_path: "{{ webtrees_base_path }}/config"
-webtrees_log_path: "{{ webtrees_base_path }}/logs"
+webtrees_modules_path: "{{ webtrees_base_path }}/modules"
 
 webtrees_container_image: "{{ webtrees_container_image_registry_prefix }}nathanvaughn/webtrees:{{ webtrees_container_image_tag }}"
 webtrees_container_image_registry_prefix: docker.io/

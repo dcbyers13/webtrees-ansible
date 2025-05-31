@@ -10,9 +10,7 @@
   with_items:
     - path: "{{ webtrees_data_path }}"
       mode: "0750"
-    - path: "{{ webtrees_config_path }}"
-      mode: "0750"
-    - path: "{{ webtrees_log_path }}"
+    - path: "{{ webtrees_modules_path }}"
       mode: "0750"
 
 - name: Ensure WebTrees support files installed
